@@ -8,6 +8,7 @@ const TruckList = ({
   selectedTruck,
   onSelectTruck,
   isLoadingLocation,
+  isDefaultLocation,
 }) => {
   if (isLoadingLocation) {
     return (
@@ -47,16 +48,29 @@ const TruckList = ({
 
   return (
     <div>
-      <div className="mb-8 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 shadow-sm">
+      <div className={`mb-8 p-4 rounded-xl border-2 shadow-sm ${
+        isDefaultLocation 
+          ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200' 
+          : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200'
+      }`}>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-600 rounded-lg">
+          <div className={`p-2 rounded-lg ${
+            isDefaultLocation ? 'bg-yellow-600' : 'bg-blue-600'
+          }`}>
             <MapPin className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <p className="text-xs font-semibold text-gray-600 uppercase">Votre position</p>
-            <p className="text-sm font-bold text-gray-800">
-              {userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}
+          <div className="flex-1">
+            <p className="text-xs font-semibold text-gray-600 uppercase">
+              {isDefaultLocation ? 'Position par défaut' : 'Votre position'}
             </p>
+            <p className="text-sm font-bold text-gray-800">
+              {isDefaultLocation ? 'Regueb, Sidi Bouzid' : `${userLocation.latitude.toFixed(4)}, ${userLocation.longitude.toFixed(4)}`}
+            </p>
+            {isDefaultLocation && (
+              <p className="text-xs text-gray-600 mt-1">
+                Géolocalisation indisponible - Utilisation de la position par défaut
+              </p>
+            )}
           </div>
         </div>
       </div>

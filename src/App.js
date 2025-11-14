@@ -12,9 +12,16 @@ function App() {
   const [trucks, setTrucks] = useState(initialTrucks);
   const [userLocation, setUserLocation] = useState(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [isDefaultLocation, setIsDefaultLocation] = useState(false);
   const [selectedTruck, setSelectedTruck] = useState(null);
   const [requests, setRequests] = useState([]);
   const [activeTab, setActiveTab] = useState('trucks'); // 'trucks' or 'requests'
+
+  // Position par défaut : Regueb, Sidi Bouzid, Tunisie
+  const DEFAULT_LOCATION = {
+    latitude: 35.0333,
+    longitude: 9.4833, // Regueb, Sidi Bouzid
+  };
 
   // Détection de la position de l'utilisateur
   useEffect(() => {
@@ -29,6 +36,9 @@ function App() {
         },
         (error) => {
           console.error('Erreur de géolocalisation:', error);
+          // Utiliser Regueb, Sidi Bouzid comme position par défaut
+          setUserLocation(DEFAULT_LOCATION);
+          setIsDefaultLocation(true);
           setIsLoadingLocation(false);
         },
         {
@@ -38,6 +48,9 @@ function App() {
         }
       );
     } else {
+      // Géolocalisation non supportée, utiliser la position par défaut
+      setUserLocation(DEFAULT_LOCATION);
+      setIsDefaultLocation(true);
       setIsLoadingLocation(false);
     }
   }, []);
@@ -183,6 +196,7 @@ function App() {
               selectedTruck={selectedTruck}
               onSelectTruck={handleSelectTruck}
               isLoadingLocation={isLoadingLocation}
+              isDefaultLocation={isDefaultLocation}
             />
           )}
 
